@@ -17,9 +17,9 @@ public class UIMNG : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)) {
+        /*if(Input.GetKeyDown(KeyCode.Space)) {
             for(int i=0; i<btnList.Length; i++)
                 btnList[i].interactable = !btnList[i].interactable;
-        }
+        }*/
     }
 }
