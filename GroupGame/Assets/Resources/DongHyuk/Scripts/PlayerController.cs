@@ -18,6 +18,16 @@ public class PlayerController : MonoBehaviour
 
     float jumpForce = 200;
     bool isJump = false;
+
+    [SerializeField]
+    private float lookSensitivity;
+
+    [SerializeField]
+    float cameraRotationLimit;
+    float currentCameraRotationX = 0f;
+
+    [SerializeField]
+    Camera theCamera;
     
     void Awake() {
         coll = GetComponent<CapsuleCollider>();
@@ -31,19 +41,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        /*if(KeyController.I.Long(KeyCode.Space, 1f))
-            Debug.Log("SPACE");
-        if(KeyController.I.LongUp(KeyCode.Space, 1f))
-            Debug.Log("SPACE UP");
-        if(KeyController.I.Double(KeyCode.F, 0.3f))
-            Debug.Log("F");
-        if(KeyController.I.Double(KeyCode.G, 0.3f))
-            Debug.Log("G");
-        if(KeyController.I.DoubleUp(KeyCode.H, 0.3f))
-            Debug.Log("H");*/
-
         CheckKey();
         Rotate();
+        if(!Cursor.visible) {
+            CharacterRotation();
+            CameraRotation();
+        }
 
         rigid.MovePosition(transform.position + velocity * Time.deltaTime);
     }
@@ -88,12 +91,6 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(KeyCode.S))
             _vertical = -1;
 
-        if(KeyController.I.Double(KeyCode.A, 0.5f))
-            _dash = 50;
-        if(KeyController.I.Double(KeyCode.D, 0.5f))
-            _dash = 50;
-
-
         velocity = (transform.right * _horizontal) + (transform.forward * _vertical);
         velocity = velocity.normalized * speed * _dash;
     }
@@ -116,5 +113,20 @@ public class PlayerController : MonoBehaviour
     void CheckJumpKey() {
         if(Input.GetKeyDown(KeyCode.Space) && isGround && !isJump)
             isJump = true;
+    }
+
+    private void CharacterRotation() {
+        float _yRotation = Input.GetAxisRaw("Mouse X");
+        Vector3 _characterRotationY = new Vector3(0, _yRotation, 0) * lookSensitivity;
+        rigid.MoveRotation(rigid.rotation * Quaternion.Euler(_characterRotationY));
+    }
+
+    private void CameraRotation() {
+        float _xRotation = Input.GetAxisRaw("Mouse Y");
+        float _cameraRotationX = _xRotation * lookSensitivity;
+        currentCameraRotationX -= _cameraRotationX;
+        currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
+
+        theCamera.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0, 0);
     }
 }
