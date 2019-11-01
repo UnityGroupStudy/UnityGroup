@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class UIMNG : MonoBehaviour
 {
     public MenuPopup menuPopup;
+    public InventoryPopup inventoryPopup;
+
     public Button[] btnList;
 
     void Start()
@@ -27,11 +29,21 @@ public class UIMNG : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Escape)) {
             menuPopup.ChangeShow();
+            if(inventoryPopup.isShow)
+                inventoryPopup.ChangeShow();
+
             SetCursorEnable(!Cursor.visible);
         }
     }
 
+    public void ShowInventory() {
+        inventoryPopup.ChangeShow();
+    }
+
     public void SetCursorEnable(bool isEnable) {
+        if(Application.isEditor)
+            return ;
+
         if(!isEnable) {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
