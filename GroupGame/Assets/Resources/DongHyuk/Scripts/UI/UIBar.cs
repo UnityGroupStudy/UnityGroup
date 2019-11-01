@@ -1,31 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIBar : MonoBehaviour
 {
     public int maxValue;
     public int value;
-    public Vector2 rectFullSizeDelta;
-    public Vector2 rectSizeDelta;
-    
-    public RectTransform rectTransform;
+
+    public Image image;
     public Transform backTransform;
-    public RectTransform backRectTransform;
 
     void Awake() {
-        rectTransform = GetComponent<RectTransform>();
-
         backTransform = transform.GetChild(0);
-        backRectTransform = backTransform.GetComponent<RectTransform>();
+        image = backTransform.GetComponent<Image>();
     }
 
     void Start()
     {
-        rectFullSizeDelta = rectTransform.sizeDelta;
-        rectSizeDelta = rectFullSizeDelta;
-        backRectTransform.sizeDelta = rectSizeDelta;
-
         maxValue = 100;
         value = 100;
     }
@@ -38,15 +30,8 @@ public class UIBar : MonoBehaviour
     }
 
     public void SetValue(int value) {
-        this.value = value;
+        this.value = Mathf.Clamp(value, 0, 100);
         
-        rectSizeDelta.y = rectFullSizeDelta.y * ((float)value / (float)maxValue);
-
-        if(rectSizeDelta.y >= rectFullSizeDelta.y)
-            rectSizeDelta.y = rectFullSizeDelta.y;
-        if(rectSizeDelta.y < 0)
-            rectSizeDelta.y = 0;
-            
-        backRectTransform.sizeDelta = rectSizeDelta;
+        image.fillAmount = ((float)this.value / (float)maxValue);
     }
 }

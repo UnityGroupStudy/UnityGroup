@@ -21,8 +21,8 @@ public class MenuPopup : MonoBehaviour
 
     void Start()
     {
-        rectFullSizeDelta = new Vector2(800, 800);
-        rectSizeDelta = new Vector2(800, 0);
+        rectFullSizeDelta = new Vector2(400, 600);
+        rectSizeDelta = new Vector2(400, 0);
         rectTransform.sizeDelta = rectSizeDelta;
 
         isShow = false;
@@ -31,15 +31,15 @@ public class MenuPopup : MonoBehaviour
         for(int i=1; i<childRectTransform.Length; i++) {
             if(i % 2 == 0) continue;
             childRectTransform[i].anchoredPosition = new Vector3(0, -((i / 2) * 150)*(rectSizeDelta.y / rectFullSizeDelta.y), 0f);
-            childRectTransform[i].sizeDelta = new Vector2(800, 100f*(rectSizeDelta.y / rectFullSizeDelta.y));
+            childRectTransform[i].sizeDelta = new Vector2(400, 100f*(rectSizeDelta.y / rectFullSizeDelta.y));
         }
     }
 
     void Update() {
-        if(Input.GetKeyDown(KeyCode.Tab)) {
+        /*if(Input.GetKeyDown(KeyCode.Escape)) {
             isEnable = !isEnable;
             isShow = true;
-        }
+        }*/
 
         if(isShow) {
             if(isEnable)
@@ -51,15 +51,20 @@ public class MenuPopup : MonoBehaviour
             for(int i=1; i<childRectTransform.Length; i++) {
                 if(i % 2 == 0) continue;
                 childRectTransform[i].anchoredPosition = new Vector3(0, -((i / 2) * 150)*(rectSizeDelta.y / rectFullSizeDelta.y), 0f);
-                childRectTransform[i].sizeDelta = new Vector2(800, 100f*(rectSizeDelta.y / rectFullSizeDelta.y));
+                childRectTransform[i].sizeDelta = new Vector2(400, 100f*(rectSizeDelta.y / rectFullSizeDelta.y));
             }
         }
     }
 
+    public void ChangeShow() {
+        isEnable = !isEnable;
+        isShow = true;
+    }
+
     void On() {
-        rectSizeDelta.y = Mathf.Lerp(rectSizeDelta.y, 800, Time.deltaTime*3);
-        if(rectSizeDelta.y >= 780) {
-            rectSizeDelta.y = 800;
+        rectSizeDelta.y = Mathf.Lerp(rectSizeDelta.y, 600, Time.deltaTime*3);
+        if(rectSizeDelta.y >= 580) {
+            rectSizeDelta.y = 600;
             isShow = false;
         }
     }
